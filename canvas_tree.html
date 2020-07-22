@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>canvas</title>
+    <style>
+        canvas {
+            width: 512px;
+            height: 512px;
+            border: 1px solid #dedede;
+        }
+
+    </style>
+  </head>
+  <body>
+        <div>
+            <canvas width='512' height='512'></canvas>
+        </div>
+        <script>
+            class Vector2D extends Array {
+                constructor(x = 1, y = 0) {
+                    super(x, y);
+                }
+
+                set x(v) {
+                    this[0] = v;
+                }
+
+                set y(v) {
+                    this[1] = v;
+                }
+
+                get x() {
+                    return this[0];
+                }
+
+                get y() {
+                    return this[1];
+                }
+
+                get length() {
+                    return Math.hypot(this.x, this.y);
+                }
+
+                get dir() {
+                    return Math.atan2(this.y, this.x);
+                }
+
+                copy() {
+                    return new Vector2D(this.x, this.y);
+                }
+
+                add(v) {
+                    this.x += v.x;
+                    this.y += v.y;
+                    return this;
+                }
+
+                sub(v) {
+                    this.x -= v.x;
+                    this.y -= v.y;
+                    return this;
+                }
+
+                scale(a) {
+                    this.x *= a;
+                    this.y *= a;
+                    return this;
+                }
+
+                cross(v) {
+                    return this.x * v.y - v.x * this.y;
+                }
+
+                dot(v) {
+                    return this.x * v.x + v.y * this.y;
+                }
+
+                normalize() {
+                    return this.scale(1 / this.length);
+                }
+
+                rotate(rad) {
+                    const c = Math.cos(rad),
+                        s = Math.sin(rad);
+                    const [x, y] = this;
+
+                    this.x = x * c + y * -s;
+                    this.y = x * s + y * c;
+
+                    return this;
+                }
+            }
+
+            // 1、获取canvas对象，通过getContext('2d')得到2D上下文
+            // 2、设置绘图状态，比如填充颜色、平移变换
+            // 3、调用beginPath指令开始绘制徒刑
+            // 4、调用绘图指令，比如rect 绘制矩形
+            // 5、调用fill指令，将绘制内容真正输出到画布上
+
+            const canvas = document.querySelector('canvas');
+            const context = canvas.getContext('2d');
+            context.translate(canvas.width / 2, canvas.height);
+            context.scale(1, -1);
+            context.lineCap = 'round';
+
+            /**
+             * 画树枝
+             * @param context canvas2D上下文
+             * @param v0 起始向量
+             * @param length 当前树枝的长度
+             * @param chickness 树枝的粗细
+             * @param dir 树枝的方向，用与x轴的夹角表示，单位是弧度
+             * @param bias 随机偏向因子，让树枝的朝向有一定的随机性
+             */
+            function drawBranch(context, v0, length, thickness, dir, bias) {
+                const v = new Vector2D().rotate(dir).scale(length);
+                const v1 = v0.copy().add(v);
+
+                context.lineWidth = thickness;
+                context.beginPath();
+                context.moveTo(...v0);
+                context.lineTo(...v1);
+                context.stroke();
+
+                if(thickness > 2) {
+                    // const left = dir + 0.5;
+                    const left = Math.PI / 4 + 0.5 * (dir + 0.2) + bias * (Math.random() - 0.5);
+                    drawBranch(context, v1, length * 0.9, thickness * 0.8, left, bias * 0.9);
+                    const right = Math.PI / 4 + 0.5 * (dir - 0.2) + bias * (Math.random() - 0.5);
+                    // const right = dir - 0.5;
+                    drawBranch(context, v1, length * 0.9, thickness * 0.8, right, bias * 0.9);
+                }
+
+                if(thickness < 5 && Math.random() < 0.3) {
+                    context.save();
+                    context.strokeStyle = '#c72c35';
+                    const th = Math.random() * 6 + 3;
+                    context.lineWidth = th;
+                    context.beginPath();
+                    context.moveTo(...v1);
+                    context.lineTo(v1.x, v1.y - 2);
+                    context.stroke();
+                    context.restore();
+                }
+            }
+            const canvasWidth  = canvas.width;
+            const canvasHeight  = canvas.height;
+
+            const v0 = new Vector2D(0, 0);
+            drawBranch(context, v0, 50, 10, 1, 3);
+
+            const v1 = new Vector2D(-250, -150);
+            drawBranch(context, v1, 50, 8, 0.5, 3);
+
+            const v2 = new Vector2D(- canvasWidth / 2 - 100, 200);
+            drawBranch(context, v2, 50, 10, 0.3, 3);
+
+
+            context.fillStyle = 'red';
+            context.moveTo(0.75 * canvasWidth / 2, canvasHeight * 0.85)
+            context.arc(0.75 * canvasWidth / 2, canvasHeight * 0.85, 50, 0, 2 * Math.PI)
+
+            context.fill();
+
+            context.scale(1, -1);
+            context.fillStyle = '#333';
+            context.font = '1.5rem Arial';
+            context.textAlign = 'left';
+            context.fillText(`不经一番寒彻骨，`, - canvasWidth / 2 + 20, - canvasHeight + 30);
+            context.fillText(`怎得梅花扑鼻香。`, - canvasWidth / 2 + 20, - canvasHeight + 60);
+
+        </script>
+  </body>
+</html>

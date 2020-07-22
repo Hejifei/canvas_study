@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>canvas</title>
+    <style>
+        canvas {
+            width: 256px;
+            height: 256px;
+            border: 1px solid #dedede;
+        }
+    
+    </style>
+  </head>
+  <body>
+        <div>
+            <canvas width='512' height='512'></canvas>
+        </div>
+        <script>
+            // 1、获取canvas对象，通过getContext('2d')得到2D上下文
+            // 2、设置绘图状态，比如填充颜色、平移变换
+            // 3、调用beginPath指令开始绘制徒刑
+            // 4、调用绘图指令，比如rect 绘制矩形
+            // 5、调用fill指令，将绘制内容真正输出到画布上
+
+            const canvas = document.querySelector('canvas');
+            const context = canvas.getContext('2d'); 
+
+
+            const rectSize = [100, 100];
+            context.fillStyle = 'red'; 
+            context.translate(-0.5 * rectSize[0], -0.5 * rectSize[1]);
+            context.beginPath();
+            const canvasWidth  = canvas.width;
+            const canvasHeight  = canvas.height;
+            // context.rect(0.5 * (canvasWidth - rectSize[0]), 0.5 * (canvasHeight - rectSize[1]), ...rectSize)
+            context.rect(0.5 * canvasWidth, 0.5 * canvasHeight, ...rectSize);
+            // 平移
+            
+            // 恢复
+            //context.translate(0.5 * rectSize[0], 0.5 * rectSize[1]);
+
+            // context.save(); // 暂存状态
+            // 平移
+            // context.translate(-0.5 * rectSize[0], -0.5 * rectSize[1]);
+            //执行绘制
+            // context.restore(); // 恢复状态
+
+            context.fill();
+
+            context.fillStyle = 'red';
+            context.font = '1.5rem Arial';
+            context.textAlign = 'right';
+            context.fillText(`Hi, I'm Hejifei!`, canvasWidth, canvasWidth);
+            
+
+            // 偏移
+            // context.translate(-0.5 * rectSize[0], -0.5 * rectSize[1]);
+        </script>
+  </body>
+</html>

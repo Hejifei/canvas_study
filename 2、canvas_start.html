@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>canvas</title>
+    <style>
+
+        .trangle {
+          width: 0;
+          height: 0;
+          border: 50px solid transparent;
+          border-bottom: 100px solid yellow;
+        }
+
+        canvas {
+            width: 500px;
+            height: 500px;
+            border: 1px solid #dedede;
+        }
+
+    </style>
+  </head>
+  <body>
+        <div>
+            <canvas width='512' height='512'></canvas>
+        </div>
+        <script>
+            const canvas = document.querySelector('canvas');
+            const context = canvas.getContext('2d');
+
+
+            const rectSize = [100, 100];
+            context.fillStyle = 'red';
+
+            context.beginPath();
+
+            // 画脸
+            // context.arc(75, 75, 50, 0, Math.PI * 2, true); // 绘制
+            // context.moveTo(110, 75);
+            // context.arc(75, 75, 35, 0, Math.PI, false);   // 口(顺时针)
+            // context.moveTo(65, 65);
+            // context.arc(60, 65, 5, 0, Math.PI * 2, true);  // 左眼
+            // context.moveTo(95, 65);
+            // context.arc(90, 65, 5, 0, Math.PI * 2, true);  // 右眼
+
+            const canvasWidth  = canvas.width;
+            const canvasHeight  = canvas.height;
+
+            context.moveTo(0.5 * canvasWidth, 0.5 * (canvasHeight - rectSize[1]));
+            context.lineTo(0.5 * (canvasWidth - rectSize[0]), 0.5 * (canvasHeight + rectSize[1]))
+            context.lineTo(0.5 * (canvasWidth + rectSize[0]), 0.5 * (canvasHeight + rectSize[1]))
+            context.lineTo(0.5 * canvasWidth, 0.5 * (canvasHeight - rectSize[1]));
+            // context.moveTo(0.5 * (canvasWidth + rectSize[0]), 0.5 * (canvasHeight + rectSize[1]))
+            // context.closePath();
+            context.moveTo(0.5 * canvasWidth, 0.5 * (canvasHeight - rectSize[1]));
+
+
+            context.moveTo(100, 450)
+            context.arc(50, 450, 50, 0, 2 * Math.PI)
+            // context.closePath();
+
+
+            // context.fill();
+            context.stroke();
+
+
+            // 二次贝塞尔曲线
+            // 椭圆
+            context.beginPath();
+            context.moveTo(75, 25);
+            // context.quadraticCurveTo(25, 25, 25, 62.5);
+            // context.quadraticCurveTo(25, 100, 75, 100)
+            // context.quadraticCurveTo(125, 100, 125, 62.5)
+            // context.quadraticCurveTo(125, 25, 75, 25)
+            //
+            // context.moveTo(25, 25)
+            // context.lineTo(25, 100)
+            // context.lineTo(125, 100)
+            // context.lineTo(125, 25)
+            // context.closePath()
+
+            // 气泡
+            // context.quadraticCurveTo(25, 25, 25, 62.5);
+            // context.quadraticCurveTo(25, 100, 50, 100);
+            // context.quadraticCurveTo(50, 120, 30, 125);
+            // context.quadraticCurveTo(60, 120, 65, 100);
+            // context.quadraticCurveTo(125, 100, 125, 62.5);
+            // context.quadraticCurveTo(125, 25, 75, 25);
+            // context.stroke();
+            //
+            // context.fillStyle = 'blue';
+            // context.font = '1rem Arial';
+            // context.textAlign = 'left';
+            // context.fillText('Hi', 35, 62.5);
+
+            //三次贝塞尔曲线
+            context.beginPath();
+            context.moveTo(75, 40);
+            context.bezierCurveTo(75, 37, 70, 25, 50, 25);
+            context.bezierCurveTo(20, 25, 20, 62.5, 20, 62.5);
+            context.bezierCurveTo(20, 80, 40, 102, 75, 120);
+            context.bezierCurveTo(110, 102, 130, 80, 130, 62.5);
+            context.bezierCurveTo(130, 62.5, 130, 25, 100, 25);
+            context.bezierCurveTo(85, 25, 75, 37, 75, 40);
+            context.fill();
+
+
+            // const rectangle = new Path2D();
+            // rectangle.rect(10, 10, 50, 50);
+            // context.stroke(rectangle)
+
+            var p = new Path2D("M10 10 h 80 v 80 h -80 Z");
+            context.stroke(p)
+
+
+            context.fillStyle = 'red';
+            context.font = '1.5rem Arial';
+            context.textAlign = 'left';
+            context.fillText(`Author: Hejifei!`, canvasWidth, canvasWidth);
+        </script>
+  </body>
+</html>
